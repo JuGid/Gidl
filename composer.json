@@ -1,0 +1,13 @@
+{
+    "name": "juliengidel/gidl",
+    "description": "Another programming language for exercise",
+    "type": "project",
+    "license": "MIT",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Gidl\\": "src"
+        },
+        "classmap": ["src"]
+    }
+}
