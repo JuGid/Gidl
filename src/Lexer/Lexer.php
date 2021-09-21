@@ -19,8 +19,7 @@ class Lexer implements LexerInterface {
             $token = $tokenFactory->create($character);
             $container->add($token);
         }
-
-        echo strval($container);
+        
         return $container;
     }
 

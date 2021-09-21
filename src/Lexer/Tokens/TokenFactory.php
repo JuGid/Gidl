@@ -15,16 +15,20 @@ class TokenFactory {
     const TOK_NUSED_REG = '/[\t\n]/';
     const TOK_FUNC_REG = '/[\!\?]/';
     const TOK_TYPE_REG = '/[\@]/';
-    const TOK_PONCT_REG = '/[(){};]/';
+    const TOK_PONCT_REG = '/[(){}:;,]/';
     const TOK_VAR_REG = '/[\%]/';
     const TOK_WHITESPACE_REG = '/[\s]/';
 
     const TYPE_NUMBER = 'NUMBER';
+    const TYPE_NUMBER_INT = 'INT';
+    const TYPE_NUMBER_FLOAT = 'FLOAT';
     const TYPE_STRING = 'STRING';
     const TYPE_OP = 'OPERATOR';
     const TYPE_PONCTUATION = 'PONCT';
     const TYPE_NUSED = 'NUSED';
     const TYPE_FUNC = 'FUNC';
+    const TYPE_FUNC_ASK = 'FUNC_ASK';
+    const TYPE_FUNC_DECL = 'FUNC_DECL';
     const TYPE_DECL_TYPE = 'DECL_TYPE';
     const TYPE_VAR = 'VAR';
     const TYPE_WHITESPACE = 'WHITESPACE';
@@ -32,7 +36,10 @@ class TokenFactory {
     const TYPE_RPARENT = 'RPARENT';
     const TYPE_LACC = 'LACC';
     const TYPE_RACC = 'RACC';
+    const TYPE_DBL_PNT = 'DBL_PNT';
+    const TYPE_COMMA = 'COMMA';
     const TYPE_ENDEXPR = 'ENDEXPR';
+    const TYPE_RETURN_TYPE = 'RETURN_TYPE';
     const TYPE_UNKNOWN = 'UNKNOWN';
 
     private $reader;
@@ -64,6 +71,7 @@ class TokenFactory {
         elseif (preg_match(self::TOK_FUNC_REG, $character)) {return self::TYPE_FUNC;}
         elseif (preg_match(self::TOK_VAR_REG, $character)) {return self::TYPE_VAR;}
         elseif (preg_match(self::TOK_WHITESPACE_REG, $character)) {return self::TYPE_WHITESPACE;}
+        elseif (preg_match(self::TOK_TYPE_REG, $character)) {return self::TYPE_RETURN_TYPE;}
         else {
             throw new InvalidCharacterException(
                 sprintf('Invalid character at position %s : \'%s\'', clone $this->reader->getPosition(), $character)
@@ -73,6 +81,7 @@ class TokenFactory {
 
     private function createTokenFromType(string $tokenType) : Token {
         $beginPosition = clone $this->reader->getPosition();
+
         switch($tokenType) {
             case self::TYPE_NUMBER:
                 return $this->readNumber($beginPosition);
@@ -85,6 +94,9 @@ class TokenFactory {
             case self::TYPE_VAR:
                 return $this->readVariable($beginPosition);
             case self::TYPE_FUNC:
+                return $this->readFunction($beginPosition);
+            case self::TYPE_RETURN_TYPE:
+                return $this->readReturnType($beginPosition);
             case self::TYPE_WHITESPACE:
                 return new Token($beginPosition, $tokenType, $this->reader->current()); 
             default :
@@ -110,10 +122,10 @@ class TokenFactory {
 
     private function getTypeOfNumber(string $number) : string {
         if(strpos($number, '.') !== false) {
-            return 'FLOAT';
+            return self::TYPE_NUMBER_FLOAT;
         }
 
-        return 'INT';
+        return self::TYPE_NUMBER_INT;
     }
 
     private function readOperator(Position $begin_position) : Token {
@@ -145,6 +157,8 @@ class TokenFactory {
         elseif($character == '{') {$type = self::TYPE_LACC;}
         elseif($character == '}') {$type = self::TYPE_RACC;}
         elseif($character == ';') {$type = self::TYPE_ENDEXPR;}
+        elseif($character == ':') {$type = self::TYPE_DBL_PNT;}
+        elseif($character == ',') {$type = self::TYPE_COMMA;}
         else {$type = self::TYPE_UNKNOWN;}
 
         return $type;
@@ -156,6 +170,29 @@ class TokenFactory {
             $variable .= $character;
         }
 
+        $this->reader->previous();
         return new Token($begin_position, self::TYPE_VAR, $variable);
+    }
+
+    private function readFunction(Position $begin_position) : Token {
+        $character = $this->reader->current();
+        $type = $character == '!' ? self::TYPE_FUNC_DECL : self::TYPE_FUNC_ASK;
+
+        $function_name = $this->readCharacters();
+        
+        return new Token($begin_position, $type, $function_name);
+    }
+
+    private function readReturnType(Position $begin_position) : Token {
+        return new Token($begin_position, self::TYPE_RETURN_TYPE, $this->readCharacters());
+    }
+
+    private function readCharacters() : string {
+        $characters = '';
+        while(($character = $this->reader->next()) && preg_match(self::TOK_CHAR_REG, $character)) {
+            $characters .= $character;
+        }
+        $this->reader->previous();
+        return $characters;
     }
 }

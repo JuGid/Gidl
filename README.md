@@ -12,7 +12,7 @@ This is the syntax I would like to express
 	expose %nom;
 	reserve %location;
 
-	!creation(%nom) {
+	!creation : %nom @void {
 		this.nom = %nom;
 		this.location = "Nowhere";
 	}
