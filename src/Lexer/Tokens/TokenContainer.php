@@ -17,8 +17,10 @@ class TokenContainer {
     }
 
     public function add(Token $token) {
-        $this->container[] = $token;
-        $this->size += 1;
+        if($token->getType() !== TokenFactory::TYPE_NUSED) {
+            $this->container[] = $token;
+            $this->size += 1;
+        }
     }
 
     public function pop() : Token {

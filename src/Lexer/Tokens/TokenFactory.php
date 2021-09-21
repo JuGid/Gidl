@@ -3,6 +3,7 @@
 namespace Gidl\Lexer\Tokens;
 
 use Gidl\Exceptions\InvalidCharacterException;
+use Gidl\Exceptions\KeywordException;
 use Gidl\Exceptions\NotUsedException;
 use Gidl\Lexer\CharacterReader;
 
@@ -12,12 +13,11 @@ class TokenFactory {
     const TOK_STR_REG = '/"/';
     const TOK_CHAR_REG = '/[0-9a-zA-Z]/';
     const TOK_OP_REG = '/[\+\-\*\/\=]/';
-    const TOK_NUSED_REG = '/[\t\n]/';
+    const TOK_NUSED_REG = '/[\t\n\s]/';
     const TOK_FUNC_REG = '/[\!\?]/';
     const TOK_TYPE_REG = '/[\@]/';
     const TOK_PONCT_REG = '/[(){}:;,]/';
     const TOK_VAR_REG = '/[\%]/';
-    const TOK_WHITESPACE_REG = '/[\s]/';
 
     const TYPE_NUMBER = 'NUMBER';
     const TYPE_NUMBER_INT = 'INT';
@@ -31,7 +31,6 @@ class TokenFactory {
     const TYPE_FUNC_DECL = 'FUNC_DECL';
     const TYPE_DECL_TYPE = 'DECL_TYPE';
     const TYPE_VAR = 'VAR';
-    const TYPE_WHITESPACE = 'WHITESPACE';
     const TYPE_LPARENT = 'LPARENT';
     const TYPE_RPARENT = 'RPARENT';
     const TYPE_LACC = 'LACC';
@@ -40,7 +39,24 @@ class TokenFactory {
     const TYPE_COMMA = 'COMMA';
     const TYPE_ENDEXPR = 'ENDEXPR';
     const TYPE_RETURN_TYPE = 'RETURN_TYPE';
+    const TYPE_KEYWORD = 'KEYWORD';
     const TYPE_UNKNOWN = 'UNKNOWN';
+
+    const KEYWORDS = [
+        'expose',
+        'reserve',
+        'out',
+        'if',
+        'elseif',
+        'else',
+        'for',
+        'in',
+        'to',
+        'while',
+        'and',
+        'or',
+        'not'
+    ];
 
     private $reader;
 
@@ -52,9 +68,9 @@ class TokenFactory {
     public function create($character) : Token {
 
         $tokenType = $this->detectType($character);
-        
+
         if($tokenType == self::TYPE_NUSED) {
-            throw new NotUsedException();
+            return new Token(clone $this->reader->getPosition(), self::TYPE_NUSED, '');
         }
 
         $token = $this->createTokenFromType($tokenType);
@@ -67,11 +83,11 @@ class TokenFactory {
         elseif (preg_match(self::TOK_OP_REG, $character)) {return self::TYPE_OP;}
         elseif (preg_match(self::TOK_STR_REG, $character)) {return self::TYPE_STRING;}
         elseif (preg_match(self::TOK_PONCT_REG, $character)) {return self::TYPE_PONCTUATION;}
-        elseif (preg_match(self::TOK_NUSED_REG, $character)) {return self::TYPE_NUSED;}
         elseif (preg_match(self::TOK_FUNC_REG, $character)) {return self::TYPE_FUNC;}
         elseif (preg_match(self::TOK_VAR_REG, $character)) {return self::TYPE_VAR;}
-        elseif (preg_match(self::TOK_WHITESPACE_REG, $character)) {return self::TYPE_WHITESPACE;}
         elseif (preg_match(self::TOK_TYPE_REG, $character)) {return self::TYPE_RETURN_TYPE;}
+        elseif (preg_match(self::TOK_CHAR_REG, $character)) {return self::TYPE_KEYWORD;}
+        elseif (preg_match(self::TOK_NUSED_REG, $character)) {return self::TYPE_NUSED;}
         else {
             throw new InvalidCharacterException(
                 sprintf('Invalid character at position %s : \'%s\'', clone $this->reader->getPosition(), $character)
@@ -97,8 +113,8 @@ class TokenFactory {
                 return $this->readFunction($beginPosition);
             case self::TYPE_RETURN_TYPE:
                 return $this->readReturnType($beginPosition);
-            case self::TYPE_WHITESPACE:
-                return new Token($beginPosition, $tokenType, $this->reader->current()); 
+            case self::TYPE_KEYWORD:
+                return$this->readKeyword($beginPosition);
             default :
                 return new Token($beginPosition, self::TYPE_UNKNOWN, $this->reader->current());
         }
@@ -187,6 +203,18 @@ class TokenFactory {
         return new Token($begin_position, self::TYPE_RETURN_TYPE, $this->readCharacters());
     }
 
+    private function readKeyword(Position $begin_position) : Token {
+        $this->reader->previous();
+        $identifier = $this->readCharacters();
+        if(!in_array($identifier, self::KEYWORDS)) {
+            throw new KeywordException(
+                sprintf('Keyword %s does not exist at %s', $identifier, $begin_position)
+            );
+        }
+
+        return new Token($begin_position, self::TYPE_KEYWORD, $identifier);
+    }
+
     private function readCharacters() : string {
         $characters = '';
         while(($character = $this->reader->next()) && preg_match(self::TOK_CHAR_REG, $character)) {
@@ -195,4 +223,6 @@ class TokenFactory {
         $this->reader->previous();
         return $characters;
     }
+
+    
 }

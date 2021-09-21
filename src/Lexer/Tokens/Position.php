@@ -32,6 +32,6 @@ class Position {
 
     public function __toString()
     {
-        return '[' . $this->index . ',' . $this->line . ']';
+        return '[' . $this->index . ':' . $this->line . ']';
     }
 }

@@ -12,11 +12,13 @@ class Repl {
         while(true) {
             $input = readline('>>> ');
 
+            if($input == 'exit') : die("Exit, Bye !\n");endif;
+
             try {
                 $output = $lexer->tokenize($input);
-                echo $output . "\n";
+                echo $output , "\n";
             } catch(\Exception $e) {
-                die($e->getMessage() . "\n");
+                echo $e->getMessage(), "\n";
             }
             
         }
