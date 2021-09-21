@@ -42,9 +42,9 @@ class TokenContainer {
         $tokenStringValue = [];
 
         foreach($this->container as $token) {
-            $tokenStringValue[] = strval($token);
+            $tokenStringValue[] = strval($token) . "\n";
         }
 
-        return implode(', ', $tokenStringValue);
+        return implode('', $tokenStringValue);
     }
 }
