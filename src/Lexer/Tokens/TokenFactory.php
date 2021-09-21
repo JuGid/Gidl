@@ -4,7 +4,6 @@ namespace Gidl\Lexer\Tokens;
 
 use Gidl\Exceptions\InvalidCharacterException;
 use Gidl\Exceptions\KeywordException;
-use Gidl\Exceptions\NotUsedException;
 use Gidl\Lexer\CharacterReader;
 
 class TokenFactory {
@@ -16,7 +15,7 @@ class TokenFactory {
     const TOK_NUSED_REG = '/[\t\n\s]/';
     const TOK_FUNC_REG = '/[\!\?]/';
     const TOK_TYPE_REG = '/[\@]/';
-    const TOK_PONCT_REG = '/[(){}:;,]/';
+    const TOK_PONCT_REG = '/[(){}:;,>]/';
     const TOK_VAR_REG = '/[\%]/';
 
     const TYPE_NUMBER = 'NUMBER';
@@ -37,6 +36,7 @@ class TokenFactory {
     const TYPE_RACC = 'RACC';
     const TYPE_DBL_PNT = 'DBL_PNT';
     const TYPE_COMMA = 'COMMA';
+    const TYPE_CHEVRON = 'CHEVRON';
     const TYPE_ENDEXPR = 'ENDEXPR';
     const TYPE_RETURN_TYPE = 'RETURN_TYPE';
     const TYPE_KEYWORD = 'KEYWORD';
@@ -164,20 +164,7 @@ class TokenFactory {
 
     private function readPonctuation(Position $begin_position) : Token {
         $character = $this->reader->current();
-        return new Token($begin_position, $this->getTypeOfPunctuation($character), $character);
-    }
-
-    private function getTypeOfPunctuation(string $character) : string {
-        if($character == '(') {$type = self::TYPE_LPARENT;}
-        elseif($character == ')') {$type = self::TYPE_RPARENT;}
-        elseif($character == '{') {$type = self::TYPE_LACC;}
-        elseif($character == '}') {$type = self::TYPE_RACC;}
-        elseif($character == ';') {$type = self::TYPE_ENDEXPR;}
-        elseif($character == ':') {$type = self::TYPE_DBL_PNT;}
-        elseif($character == ',') {$type = self::TYPE_COMMA;}
-        else {$type = self::TYPE_UNKNOWN;}
-
-        return $type;
+        return new Token($begin_position, self::TYPE_PONCTUATION, $character);
     }
 
     private function readVariable(Position $begin_position) : Token {
