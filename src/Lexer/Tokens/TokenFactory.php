@@ -18,6 +18,7 @@ class TokenFactory {
         'for',
         'in',
         'to',
+        'new',
         'while',
         'and', // logical and
         'or', // logical or
@@ -127,7 +128,7 @@ class TokenFactory {
 
     private function readPonctuation(Position $begin_position) : Token {
         $character = $this->reader->current();
-        return new Token($begin_position, TokenTypes::TYPE_PONCTUATION, $character);
+        return new Token($begin_position, $this->tokenDetector->detectPonctuationType($character, $begin_position), $character);
     }
 
     private function readVariable(Position $begin_position) : Token {

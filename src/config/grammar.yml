@@ -1,0 +1,12 @@
+simple: (MINUS|PLUS) INT|FLOAT|VAR|function-ask
+simplep: LPARENT simple RPARENT | LPARENT condition RPARENT
+assign: VAR OPERATOR(=) simple ENDEXPR
+condition: (KEYWORD(not)) simple KEYWORD(lt, mt, leqt, meqt, and, or, eq, dif, andb, orb) simple
+if-else: IF simplep LACC (simple)* RACC (ELSEIF simplep LACC (expr)* RACC)* (ELSE simplep LACC (expr)* RACC)
+for: KEYWORD(for) LPARENT VAR KEYWORD(in) VAR RPARENT LACC (expr)* RACC
+for-iter: KEYWORD(for) LPARENT assign ENDEXPR condition ENDEXPR expr RPARENT LACC (expr)* RACC
+while: KEYWORD(while) LPARENT condition RPARENT LACC (expr)* RACC
+function: FUNC_DECL DBL_PNT (VAR(,VAR)*) (RETURN_TYPE) LACC (expr*) RACC
+function-ask: FUNC_ASK LPARENT (VAR(,VAR)*) RPARENT ENDEXPR
+return: CHEVRON CHEVRON VAR ENDEXPR
+property: KEYWORD(expose)|KEYWORD(reserve) VAR|assign ENDEXPR

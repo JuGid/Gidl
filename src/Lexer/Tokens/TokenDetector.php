@@ -19,6 +19,17 @@ class TokenDetector {
         TokenRegexes::TOK_NUSED_REG =>  TokenTypes::TYPE_NUSED,
     ];
 
+    private $ponctuationTypes = [
+        '(' => TokenTypes::TYPE_LPARENT,
+        ')' => TokenTypes::TYPE_RPARENT,
+        '{' => TokenTypes::TYPE_LACC,
+        '}' => TokenTypes::TYPE_RACC,
+        ':' => TokenTypes::TYPE_DBL_PNT,
+        ',' => TokenTypes::TYPE_COMMA,
+        '>' => TokenTypes::TYPE_CHEVRON,
+        ';' => TokenTypes::TYPE_ENDEXPR
+        ];
+
     public function detect(string $character, Position $position) : string {
 
         foreach($this->regexToType as $regex=>$type) {
@@ -29,6 +40,18 @@ class TokenDetector {
 
         throw new InvalidCharacterException(
             sprintf('Invalid character at position %s : \'%s\'', $position, $character)
+        );
+    }
+
+    public function detectPonctuationType(string $character, Position $position) {
+        foreach($this->ponctuationTypes as $ponctuation=>$type) {
+            if($ponctuation === $character) {
+                return $type;
+            }
+        }
+
+        throw new InvalidCharacterException(
+            sprintf('Invalid ponctuation at position %s : \'%s\'', $position, $character)
         );
     }
 }
