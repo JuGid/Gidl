@@ -17,7 +17,7 @@ class TokenContainer {
     }
 
     public function add(Token $token) {
-        if($token->getType() !== TokenFactory::TYPE_NUSED) {
+        if($token->getType() !== TokenTypes::TYPE_NUSED) {
             $this->container[] = $token;
             $this->size += 1;
         }

@@ -15,11 +15,11 @@ class Lexer implements LexerInterface {
         $tokenFactory = new TokenFactory($reader);
         $container = new TokenContainer();
         
-        while($character = $reader->next()) {
+        while(($character = $reader->next()) !== false) {
             $token = $tokenFactory->create($character);
             $container->add($token);
         }
-        
+
         return $container;
     }
 
