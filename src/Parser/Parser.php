@@ -6,12 +6,15 @@ use Gidl\Lexer\Tokens\TokenContainer;
 
 class Parser implements ParserInterface {
 
-    public function __construct()
+    /** @var TokenContainer */
+    private $tokens;
+
+    public function __construct(TokenContainer $tokens)
     {
-        
+        $this->tokens = $tokens;
     }
-    
-    public function parse(TokenContainer $tokens) {
+
+    public function parse() {
 
     }
 }

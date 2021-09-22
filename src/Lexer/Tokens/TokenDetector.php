@@ -6,6 +6,7 @@ use Gidl\Exceptions\InvalidCharacterException;
 
 class TokenDetector {
 
+    /** @var array */
     private $regexToType = [
         TokenRegexes::TOK_NUMBER_REG => TokenTypes::TYPE_NUMBER,
         TokenRegexes::TOK_OP_REG => TokenTypes::TYPE_OP,
@@ -18,7 +19,7 @@ class TokenDetector {
         TokenRegexes::TOK_NUSED_REG =>  TokenTypes::TYPE_NUSED,
     ];
 
-    public function detect(string $character) : string {
+    public function detect(string $character, Position $position) : string {
 
         foreach($this->regexToType as $regex=>$type) {
             if(preg_match($regex, $character)) {
@@ -27,7 +28,7 @@ class TokenDetector {
         }
 
         throw new InvalidCharacterException(
-            sprintf('Invalid character at position %s : \'%s\'', clone $this->reader->getPosition(), $character)
+            sprintf('Invalid character at position %s : \'%s\'', $position, $character)
         );
     }
 }

@@ -6,8 +6,10 @@ use Gidl\Exceptions\ContainerException;
 
 class TokenContainer {
 
+    /** @var array */
     private $container;
 
+    /** @var int */
     private $size;
 
     public function __construct()

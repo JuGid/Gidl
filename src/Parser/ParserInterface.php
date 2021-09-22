@@ -2,9 +2,10 @@
 
 namespace Gidl\Parser;
 
-use Gidl\Lexer\Tokens\TokenContainer;
-
 interface ParserInterface {
 
-    public function parse(TokenContainer $tokens);
+    /**
+     * Parse a Token container into a tree
+     */
+    public function parse();
 }

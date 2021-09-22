@@ -4,10 +4,13 @@ namespace Gidl\Lexer\Tokens;
 
 class Token {
 
+    /** @var Position */
     private $startPosition;
 
+    /** @var string */
     private $type;
 
+    /** @var string */
     private $value;
 
     public function __construct(Position $position, string $type, string $value)

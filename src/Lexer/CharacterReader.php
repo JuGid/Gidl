@@ -7,8 +7,10 @@ use Gidl\Lexer\Tokens\Position;
 
 class CharacterReader {
 
+    /** @var string */
     private $text;
 
+    /** @var Position */
     private $position;
 
     public function __construct(string $text)
@@ -21,7 +23,7 @@ class CharacterReader {
         return $this->position;
     }
 
-    public function current() {
+    public function current() : string {
         return $this->text[$this->position->getIndex()];
     }
 
@@ -37,7 +39,7 @@ class CharacterReader {
             $this->next();
         }
 
-        return $this->text[$this->position->getIndex()];
+        return $this->current();
     }
 
     public function previous() {

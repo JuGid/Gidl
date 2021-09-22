@@ -32,8 +32,10 @@ class TokenFactory {
         'dif' // different
     ];
 
+    /** @var CharacterReader */
     private $reader;
 
+    /** @var TokenDetector */
     private $tokenDetector;
 
     public function __construct(CharacterReader $reader)
@@ -44,7 +46,7 @@ class TokenFactory {
 
     public function create($character) : Token {
 
-        $tokenType = $this->tokenDetector->detect($character);
+        $tokenType = $this->tokenDetector->detect($character, $this->reader->getPosition());
 
         if($tokenType == TokenTypes::TYPE_NUSED) {
             return new Token(clone $this->reader->getPosition(), TokenTypes::TYPE_NUSED, '');

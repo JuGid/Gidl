@@ -4,8 +4,10 @@ namespace Gidl\Lexer\Tokens;
 
 class Position {
 
+    /** @var int */
     public $index;
 
+    /** @var int */
     public $line;
 
     public function __construct(int $index, int $line)
