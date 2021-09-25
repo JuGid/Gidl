@@ -11,6 +11,7 @@ class TokenTypes {
     const TYPE_PONCTUATION = 'PONCT';
     const TYPE_NUSED = 'NUSED';
     const TYPE_FUNC = 'FUNC';
+    const TYPE_OBJ = 'OBJ';
     const TYPE_FUNC_ASK = 'FUNC_ASK';
     const TYPE_FUNC_DECL = 'FUNC_DECL';
     const TYPE_DECL_TYPE = 'DECL_TYPE';

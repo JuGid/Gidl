@@ -53,4 +53,9 @@ class CharacterReader {
 
         $this->position = $new_position;
     }
+
+    public function __toString()
+    {
+        return "Reader at position : " . $this->position;
+    }
 }
