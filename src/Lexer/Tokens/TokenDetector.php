@@ -17,7 +17,8 @@ class TokenDetector {
         TokenRegexes::TOK_TYPE_REG =>  TokenTypes::TYPE_RETURN_TYPE,
         TokenRegexes::TOK_CHAR_REG =>  TokenTypes::TYPE_KEYWORD,
         TokenRegexes::TOK_NUSED_REG =>  TokenTypes::TYPE_NUSED,
-        TokenRegexes::TOK_OBJ_REG => TokenTypes::TYPE_OBJ
+        TokenRegexes::TOK_OBJ_REG => TokenTypes::TYPE_OBJ,
+        TokenRegexes::TOK_IF_REG => TokenTypes::TYPE_IF
     ];
 
     private $punctuationTypes = [

@@ -27,4 +27,7 @@ class TokenTypes {
     const TYPE_RETURN_TYPE = 'RETURN_TYPE';
     const TYPE_KEYWORD = 'KEYWORD';
     const TYPE_UNKNOWN = 'UNKNOWN';
+    const TYPE_IF = 'IF';
+    const TYPE_ELSE = 'ELSE';
+    const TYPE_IF_ELSE = 'IFELSE';
 }

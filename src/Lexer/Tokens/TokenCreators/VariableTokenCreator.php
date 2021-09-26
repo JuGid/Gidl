@@ -11,7 +11,9 @@ class VariableTokenCreator extends AbstractTokenCreator {
 
     public function create(Position $begin_position) {
         $variable = '';
-        while(($character = $this->reader->next()) !== false && preg_match(TokenRegexes::TOK_CHAR_REG, $character)) {
+        while(($character = $this->reader->next()) !== false 
+                && (preg_match(TokenRegexes::TOK_CHAR_REG, $character) || $character == '.')
+            ) {
             $variable .= $character;
         }
 

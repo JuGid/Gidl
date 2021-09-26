@@ -26,6 +26,8 @@ class TokenCreatorFactory {
                 return new FunctionTokenCreator($reader);
             case TokenTypes::TYPE_RETURN_TYPE:
                 return new ReturnTypeTokenCreator($reader);
+            case TokenTypes::TYPE_IF:
+                return new ConditionTokenCreator($reader);
             case TokenTypes::TYPE_KEYWORD:
                 return new KeywordTokenCreator($reader);
             default :

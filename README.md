@@ -13,8 +13,8 @@ This is the syntax I would like to express
 	reserve %location;
 
 	!creation : %nom @void {
-		this.nom = %nom;
-		this.location = "Nowhere";
+		%this.nom = %nom;
+		%this.location = "Nowhere";
 	}
 
 	!getName : {
@@ -29,7 +29,15 @@ This is the syntax I would like to express
 	>> true;
 };
 
-%retour = ?test(nom);
+$(%sentence eq "Hello") {
+	%name = "Great";
+} &(%sentence eq "World") {
+	%name = "Easy";
+} & {
+	%name = "No name";
+}
+
+%retour = ?test(%name);
 %obj = new Objet();
 out obj.getName();
 ```

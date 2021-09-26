@@ -13,4 +13,5 @@ class TokenRegexes {
     const TOK_TYPE_REG = '/[\@]/';
     const TOK_PUNCT_REG = '/[(){}:;,>]/';
     const TOK_VAR_REG = '/[\%]/';
+    const TOK_IF_REG = '/[&$]/';
 }
