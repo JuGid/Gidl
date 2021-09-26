@@ -28,7 +28,8 @@ class KeywordTokenCreator extends AbstractTokenCreator {
         'meqt', //more equal than
         'leqt', // less equal than
         'eq', // equal
-        'dif' // different
+        'dif', // different
+        'php'
     ];
 
     public function create(Position $begin_position) {

@@ -24,8 +24,8 @@ This is the syntax I would like to express
 
 %nom = "Julien";
 
-!test : name @bool {
-	out "Hello" + name;
+!test : %name @bool {
+	out "Hello" + %name;
 	>> true;
 };
 

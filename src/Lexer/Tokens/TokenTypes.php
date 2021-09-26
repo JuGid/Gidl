@@ -14,6 +14,7 @@ class TokenTypes {
     const TYPE_OBJ = 'OBJ';
     const TYPE_FUNC_ASK = 'FUNC_ASK';
     const TYPE_FUNC_DECL = 'FUNC_DECL';
+    const TYPE_FUNC_INTERN = 'FUNC_INTERN';
     const TYPE_DECL_TYPE = 'DECL_TYPE';
     const TYPE_VAR = 'VAR';
     const TYPE_LPARENT = 'LPARENT';

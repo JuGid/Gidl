@@ -1,0 +1,15 @@
+!str_len : %string @int {
+    >> php ?str_len(%string);
+}
+
+!char_in : %char, %string @bool {
+    %i=0;
+    %str_length = ?str_len(%string);
+
+    for(%i; %i < %str_length; %i++) {
+        $(%string[%i] eq %char) {
+            >> true;
+        }
+    }
+    >> false;
+}

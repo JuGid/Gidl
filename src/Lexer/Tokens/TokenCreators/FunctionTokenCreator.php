@@ -10,7 +10,11 @@ class FunctionTokenCreator extends AbstractTokenCreator {
 
     public function create(Position $begin_position) {
         $character = $this->reader->current();
-        $type = $character == '!' ? TokenTypes::TYPE_FUNC_DECL : TokenTypes::TYPE_FUNC_ASK;
+        if($character == '!') {
+            $type = TokenTypes::TYPE_FUNC_DECL;
+        } elseif($character == '?') {
+            $type = TokenTypes::TYPE_FUNC_ASK;
+        } 
 
         $function_name = $this->readCharacters();
         
